@@ -120,14 +120,19 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Collections\IncrementalLoadingGroupCollection.cs" />
     <Compile Include="Controls\IncrementalGroupedGridViewControl.cs" />
     <Compile Include="Controls\IncrementalGroupedListViewControl.cs" />
+    <Compile Include="Extensions\IListBinarySearchExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\UWP.Extensions.Library.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.14</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI">
+      <Version>7.1.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
