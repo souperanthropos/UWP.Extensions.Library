@@ -11,48 +11,29 @@ namespace UWP.Extensions.Library.Controls
     [TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
     public sealed class IncrementalGroupedGridViewControl : GridView
     {
-        public object Source
+        public ISupportIncrementalLoading IncrementalLoadingCollection
         {
-            get { return GetValue(SourceProperty); }
-            set { SetValue(SourceProperty, value); }
+            get { return (ISupportIncrementalLoading)GetValue(IncrementalLoadingCollectionProperty); }
+            set { SetValue(IncrementalLoadingCollectionProperty, value); }
         }
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
-            nameof(Source),
-            typeof(object),
+        public static readonly DependencyProperty IncrementalLoadingCollectionProperty = DependencyProperty.Register(
+            nameof(IncrementalLoadingCollection),
+            typeof(ISupportIncrementalLoading),
             typeof(IncrementalGroupedGridViewControl),
             new PropertyMetadata(null, OnSourcePropertyChanged));
 
-        public bool IsSourceGrouped
-        {
-            get { return (bool)GetValue(IsSourceGroupedProperty); }
-            set { SetValue(IsSourceGroupedProperty, value); }
-        }
-        public static readonly DependencyProperty IsSourceGroupedProperty = DependencyProperty.Register(
-            nameof(IsSourceGrouped),
-            typeof(bool),
-            typeof(IncrementalGroupedGridViewControl),
-            new PropertyMetadata(false));
-
-        private static void OnSourcePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OnSourcePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is IncrementalGroupedGridViewControl viewControl
-                && viewControl.Source is ISupportIncrementalLoading incrementalLoading)
+                && viewControl.IncrementalLoadingCollection != null)
             {
-                if (viewControl.IsSourceGrouped)
-                {
-                    viewControl._supportIncrementalLoading = incrementalLoading;
-                    _ = viewControl._supportIncrementalLoading.LoadMoreItemsAsync(0);
-                }
-                else
-                {
-                    viewControl._supportIncrementalLoading = null;
-                }
+                await viewControl.IncrementalLoadingCollection.LoadMoreItemsAsync(0);
             }
         }
 
         private ScrollViewer _scrollViewer;
         private Panel _rootPanel;
-        private ISupportIncrementalLoading _supportIncrementalLoading;
+
         public IncrementalGroupedGridViewControl()
         {
             this.DefaultStyleKey = typeof(IncrementalGroupedGridViewControl);
@@ -74,13 +55,13 @@ namespace UWP.Extensions.Library.Controls
 
             _scrollViewer.ViewChanged += async (s, e) =>
             {
-                if (!IsSourceGrouped || _rootPanel == null || _supportIncrementalLoading == null || e.IsIntermediate) return;
+                if (!IsGrouping || _rootPanel == null || IncrementalLoadingCollection == null || e.IsIntermediate) return;
                 double distanceFromBottom = _rootPanel.ActualHeight - _scrollViewer.VerticalOffset - _scrollViewer.ActualHeight;
                 if (distanceFromBottom < 100)
                 {
-                    if (_supportIncrementalLoading.HasMoreItems)
+                    if (IncrementalLoadingCollection.HasMoreItems)
                     {
-                        await _supportIncrementalLoading.LoadMoreItemsAsync(0);
+                        await IncrementalLoadingCollection.LoadMoreItemsAsync(0);
                     }
                     Debug.WriteLine("distanceFromBottom < 100");
                 }
