@@ -20,9 +20,9 @@ namespace UWP.Extensions.Library.Controls
             nameof(IncrementalLoadingCollection),
             typeof(ISupportIncrementalLoading),
             typeof(IncrementalGroupedGridViewControl),
-            new PropertyMetadata(null, OnSourcePropertyChanged));
+            new PropertyMetadata(null, OnIncrementalLoadingCollectionPropertyChanged));
 
-        private static async void OnSourcePropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static async void OnIncrementalLoadingCollectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is IncrementalGroupedGridViewControl viewControl
                 && viewControl.IncrementalLoadingCollection != null)
