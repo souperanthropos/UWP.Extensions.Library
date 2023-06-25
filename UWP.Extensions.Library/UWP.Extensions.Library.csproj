@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Collections\IncrementalLoadingCollection.cs" />
     <Compile Include="Collections\IncrementalLoadingGroupCollection.cs" />
     <Compile Include="Controls\IncrementalGroupedGridViewControl.cs" />
     <Compile Include="Controls\IncrementalGroupedListViewControl.cs" />
