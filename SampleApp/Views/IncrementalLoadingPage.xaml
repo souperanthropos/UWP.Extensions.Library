@@ -1,0 +1,106 @@
+﻿<Page
+    x:Class="SampleApp.Views.IncrementalLoadingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SampleApp.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:UWP.Extensions.Library.Controls"
+    xmlns:models="using:SampleApp.Models"
+    xmlns:viewModels="using:SampleApp.ViewModels"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.DataContext>
+        <viewModels:IncrementalLoadingViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <CheckBox x:Name="GrouppingCheckBox"
+                  Margin="10,10,0,10" 
+                  Grid.Row="0"
+                  Content="Groupping"
+                  Click="GrouppingCheckBox_Click"/>
+        <controls:IncrementalGroupedListViewControl Grid.Row="1"
+                                                    Padding="20,0,20,36"
+                                                    Margin="0,0,0,5"
+                                                    ItemContainerStyle="{StaticResource NewListViewItemStyle}"
+                                                    IncrementalLoadingCollection="{x:Bind (ISupportIncrementalLoading)ViewModel.Items.Source, Mode=OneWay}"
+                                                    ItemsSource="{x:Bind ViewModel.Items.View, Mode=OneWay}">
+            <controls:IncrementalGroupedListViewControl.Resources>
+                <ResourceDictionary>
+                    <ResourceDictionary.ThemeDictionaries>
+                        <ResourceDictionary x:Key="Dark">
+                            <SolidColorBrush x:Key="ListViewHeaderItemBackground" Color="{ThemeResource SystemAccentColorDark2}"/>
+                        </ResourceDictionary>
+                        <ResourceDictionary x:Key="Light">
+                            <SolidColorBrush x:Key="ListViewHeaderItemBackground" Color="{ThemeResource SystemAccentColorLight3}"/>
+                        </ResourceDictionary>
+                    </ResourceDictionary.ThemeDictionaries>
+                    <Style TargetType="ListViewHeaderItem">
+                        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+                        <Setter Property="FontSize" Value="{ThemeResource ListViewHeaderItemThemeFontSize}" />
+                        <Setter Property="Background" Value="{ThemeResource ListViewHeaderItemBackground}" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Padding" Value="12,8,12,0" />
+                        <Setter Property="HorizontalContentAlignment" Value="Left" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="MinHeight" Value="18" />
+                        <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
+                        <Setter Property="CornerRadius" Value="{ThemeResource ControlCornerRadius}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListViewHeaderItem">
+                                    <Grid Margin="0,10,0,10"
+                                          Background="{TemplateBinding Background}" 
+                                          BorderBrush="{TemplateBinding BorderBrush}" 
+                                          BorderThickness="{TemplateBinding BorderThickness}" 
+                                          CornerRadius="{TemplateBinding CornerRadius}">
+                                        <ContentPresenter x:Name="ContentPresenter"
+                                                          Margin="0"
+                                                          Content="{TemplateBinding Content}"
+                                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                          ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ResourceDictionary>
+            </controls:IncrementalGroupedListViewControl.Resources>
+            <controls:IncrementalGroupedListViewControl.ItemTemplate>
+                <DataTemplate x:DataType="models:FakeData">
+                    <StackPanel Margin="5,5,0,5"
+                                Orientation="Vertical"
+                                Spacing="5">
+                        <TextBlock Text="{x:Bind Name}"/>
+                        <TextBlock Text="{x:Bind Gender}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </controls:IncrementalGroupedListViewControl.ItemTemplate>
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsStackPanel AreStickyGroupHeadersEnabled="True"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.GroupStyle>
+                <GroupStyle HidesIfEmpty="True">
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Key}"
+                                       Style="{StaticResource BodyTextBlockStyle}"
+                                       Margin="5"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+        </controls:IncrementalGroupedListViewControl>
+    </Grid>
+</Page>
