@@ -20,11 +20,19 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <CheckBox x:Name="GrouppingCheckBox"
-                  Margin="10,10,0,10" 
-                  Grid.Row="0"
-                  Content="Groupping"
-                  Click="GrouppingCheckBox_Click"/>
+        <StackPanel Grid.Row="0"
+                    Margin="10,10,0,10"
+                    Orientation="Horizontal"
+                    Spacing="5">
+            <CheckBox x:Name="GrouppingCheckBox"
+                      Grid.Row="0"
+                      Content="Groupping"
+                      Click="GrouppingCheckBox_Click"/>
+            <AutoSuggestBox Width="250"
+                            Header="Search by Name:"
+                            PlaceholderText="Enter text for search"
+                            TextChanged="AutoSuggestBox_TextChanged"/>
+        </StackPanel>
         <controls:IncrementalGroupedListViewControl Grid.Row="1"
                                                     Padding="20,0,20,36"
                                                     Margin="0,0,0,5"

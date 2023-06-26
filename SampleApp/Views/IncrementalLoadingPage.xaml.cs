@@ -35,5 +35,13 @@ namespace SampleApp.Views
                 viewModel.GrouppingCheckBoxClickedCommand?.Execute(GrouppingCheckBox.IsChecked);
             }
         }
+
+        private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            if (DataContext is IncrementalLoadingViewModel viewModel)
+            {
+                viewModel.SearchTextChangedCommand?.Execute(sender.Text);
+            }
+        }
     }
 }

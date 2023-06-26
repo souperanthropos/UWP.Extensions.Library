@@ -4,13 +4,8 @@ using Microsoft.Toolkit.Collections;
 using SampleApp.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UWP.Extensions.Library.Collections;
-using Windows.System;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using static Bogus.DataSets.Name;
 
@@ -18,15 +13,18 @@ namespace SampleApp.ViewModels
 {
     public class IncrementalLoadingViewModel : ViewModelBase
     {
+        private int _count;
         private IncrementalLoadingCollection<FakeData> _items;
         private IncrementalLoadingGroupCollection<string, FakeData> _groupItems;
 
         public CollectionViewSource Items { get; }
 
         public IRelayCommand<bool?> GrouppingCheckBoxClickedCommand { get; }
+        public IRelayCommand<string> SearchTextChangedCommand { get; }
 
         public IncrementalLoadingViewModel()
         {
+            _count = 100;
             _groupItems = new IncrementalLoadingGroupCollection<string, FakeData>(itemsPerPage: 20);
             _items = new IncrementalLoadingCollection<FakeData>(itemsPerPage: 20);
 
@@ -36,29 +34,21 @@ namespace SampleApp.ViewModels
                 Source = _items
             };
 
-            var testData = new Faker<FakeData>()
-                .CustomInstantiator(f => new FakeData())
-                .RuleFor(u => u.Gender, f => f.PickRandom<Gender>())
-                .RuleFor(u => u.Name, (f, u) => f.Name.FirstName(u.Gender) + " " + f.Name.LastName(u.Gender))
-                .Generate(100);
-
-            _items.SetSource(testData);
-
-            Items.IsSourceGrouped = false;
-            Items.Source = _items;
+            FillData(false);
 
             GrouppingCheckBoxClickedCommand = new RelayCommand<bool?>(b => OnGrouppingCheckBoxClicked(b));
+            SearchTextChangedCommand = new RelayCommand<string>(s => OnSearchTextChanged(s));
         }
 
-        private void OnGrouppingCheckBoxClicked(bool? isGroupEnabled)
+        private void FillData(bool isGroupEnabled)
         {
-            if (isGroupEnabled.HasValue && isGroupEnabled.Value)
+            if (isGroupEnabled)
             {
                 var testData = new Faker<FakeData>()
                     .CustomInstantiator(f => new FakeData())
                     .RuleFor(u => u.Gender, f => f.PickRandom<Gender>())
                     .RuleFor(u => u.Name, (f, u) => f.Name.FirstName(u.Gender) + " " + f.Name.LastName(u.Gender))
-                    .Generate(100);
+                    .Generate(_count);
 
                 var grouppingList = new List<ObservableGroup<string, FakeData>>();
                 var maleList = from td in testData
@@ -82,12 +72,44 @@ namespace SampleApp.ViewModels
                     .CustomInstantiator(f => new FakeData())
                     .RuleFor(u => u.Gender, f => f.PickRandom<Gender>())
                     .RuleFor(u => u.Name, (f, u) => f.Name.FirstName(u.Gender) + " " + f.Name.LastName(u.Gender))
-                    .Generate(100);
+                    .Generate(_count);
 
                 _items.SetSource(testData);
 
                 Items.IsSourceGrouped = false;
                 Items.Source = _items;
+            }
+        }
+
+        private void OnGrouppingCheckBoxClicked(bool? isGroupEnabled)
+        {
+            FillData(isGroupEnabled.HasValue ? isGroupEnabled.Value : false);
+        }
+
+        private void OnSearchTextChanged(string searchText)
+        {
+            var isSearchStringEmpty = string.IsNullOrEmpty(searchText);
+            if (Items.IsSourceGrouped)
+            {
+                if (isSearchStringEmpty)
+                {
+                    _groupItems.Filter = null;
+                }
+                else
+                {
+                    _groupItems.Filter = item => item.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+                }
+            }
+            else
+            {
+                if (isSearchStringEmpty)
+                {
+                    _items.Filter = null;
+                }
+                else
+                {
+                    _items.Filter = item => item.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase);
+                }
             }
         }
     }
