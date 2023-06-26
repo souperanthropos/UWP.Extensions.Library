@@ -1,1 +1,1 @@
-# UWP.Extensions.Library
+# Extensions for UWP
