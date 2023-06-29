@@ -1,1 +1,7 @@
-# Extensions for UWP
+## Controls
+- IncrementalGroupedGridViewControl
+- IncrementalGroupedListViewControl
+
+## Collections
+- IncrementalLoadingCollection
+- IncrementalLoadingGroupCollection
