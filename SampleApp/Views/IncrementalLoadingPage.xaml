@@ -37,7 +37,7 @@
                                                     Padding="20,0,20,36"
                                                     Margin="0,0,0,5"
                                                     ItemContainerStyle="{StaticResource NewListViewItemStyle}"
-                                                    IncrementalLoadingCollection="{x:Bind (ISupportIncrementalLoading)ViewModel.Items.Source, Mode=OneWay}"
+                                                    IncrementalLoadingCollection="{x:Bind ViewModel.Items.Source, Mode=OneWay}"
                                                     ItemsSource="{x:Bind ViewModel.Items.View, Mode=OneWay}">
             <controls:IncrementalGroupedListViewControl.Resources>
                 <ResourceDictionary>

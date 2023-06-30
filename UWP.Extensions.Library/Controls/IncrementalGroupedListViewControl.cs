@@ -11,28 +11,30 @@ namespace UWP.Extensions.Library.Controls
     [TemplatePart(Name = "ScrollViewer", Type = typeof(ScrollViewer))]
     public sealed class IncrementalGroupedListViewControl : ListView
     {
-        public ISupportIncrementalLoading IncrementalLoadingCollection
+        public object IncrementalLoadingCollection
         {
-            get { return (ISupportIncrementalLoading)GetValue(IncrementalLoadingCollectionProperty); }
+            get { return GetValue(IncrementalLoadingCollectionProperty); }
             set { SetValue(IncrementalLoadingCollectionProperty, value); }
         }
         public static readonly DependencyProperty IncrementalLoadingCollectionProperty = DependencyProperty.Register(
             nameof(IncrementalLoadingCollection),
-            typeof(ISupportIncrementalLoading),
+            typeof(object),
             typeof(IncrementalGroupedListViewControl),
             new PropertyMetadata(null, OnIncrementalLoadingCollectionPropertyChanged));
 
         private static async void OnIncrementalLoadingCollectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is IncrementalGroupedListViewControl viewControl
-                && viewControl.IncrementalLoadingCollection != null)
+                && viewControl.IncrementalLoadingCollection is ISupportIncrementalLoading supportIncrementalLoading)
             {
-                await viewControl.IncrementalLoadingCollection.LoadMoreItemsAsync(0);
+                await supportIncrementalLoading.LoadMoreItemsAsync(0);
             }
         }
 
         private ScrollViewer _scrollViewer;
         private Panel _rootPanel;
+
+        private ISupportIncrementalLoading _supportIncrementalLoading => IncrementalLoadingCollection as ISupportIncrementalLoading;
 
         public IncrementalGroupedListViewControl()
         {
@@ -55,13 +57,13 @@ namespace UWP.Extensions.Library.Controls
 
             _scrollViewer.ViewChanged += async (s, e) =>
             {
-                if (!IsGrouping || _rootPanel == null || IncrementalLoadingCollection == null || e.IsIntermediate) return;
+                if (!IsGrouping || _rootPanel == null || _supportIncrementalLoading == null || e.IsIntermediate) return;
                 double distanceFromBottom = _rootPanel.ActualHeight - _scrollViewer.VerticalOffset - _scrollViewer.ActualHeight;
                 if (distanceFromBottom < 100)
                 {
-                    if (IncrementalLoadingCollection.HasMoreItems)
+                    if (_supportIncrementalLoading.HasMoreItems)
                     {
-                        await IncrementalLoadingCollection.LoadMoreItemsAsync(0);
+                        await _supportIncrementalLoading.LoadMoreItemsAsync(0);
                     }
                     Debug.WriteLine("distanceFromBottom < 100");
                 }
