@@ -22,7 +22,7 @@ namespace SampleApp.ViewModels
 
         private void OpenNavigationMenuItem(string s)
         {
-            if(s == "IncrementalLoadingPage") _navigationService.NavigateFromChildFrame<IncrementalLoadingPage>();
+            if(s == "IncrementalLoadingPage") _navigationService.Navigate<IncrementalLoadingPage>("contentFrame");
         }
     }
 }
