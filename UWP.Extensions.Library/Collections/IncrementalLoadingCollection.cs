@@ -82,6 +82,7 @@ namespace UWP.Extensions.Library.Collections
         public void SetSource(IList<T> source)
         {
             _source = source;
+            _currentPageIndex = 0;
             this.Clear();
 
             if (_source.Count > 0)
@@ -92,6 +93,8 @@ namespace UWP.Extensions.Library.Collections
             {
                 HasMoreItems = false;
             }
+
+            LoadMoreItemsAsync(0);
         }
 
         public void MoveItem(T item)
