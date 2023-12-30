@@ -9,7 +9,7 @@
 ## Navigation Service
 This service supports multiple Frame elements in one application.
 
-**How-To: Navigate Between Pages With Root Frame**
+#### How-To: Navigate Between Pages With Root Frame
 ```c#
 //call Navigate method without parameters to navigate to the SecondPage
 private void GoToSecondPageClick(object sender, RoutedEventArgs e)
@@ -28,4 +28,35 @@ private void GoToSecondPageClick(object sender, RoutedEventArgs e)
 }
 ```
 
-**How-To: Navigate Between Pages With Other Frame**
+
+#### How-To: Navigate Between Pages With Other Frame
+
+Add viewmodel with implementation IViewModelBase
+```c#
+public class ViewModelBase : IViewModelBase
+{
+    public ViewModelBase() { }
+
+    public virtual void OnNavigationCompleted(Dictionary<string, object> parameter, NavigationMode navigationMode) { }
+}
+```
+Add class with implementation IDependencyInjectionProvider
+```c#
+internal class DependencyInjectionProvider : IDependencyInjectionProvider
+{
+    public INavigationService GetNavigationService()
+    {
+        return Ioc.Default.GetService<INavigationService>();
+    }
+}
+```
+
+Register route and bind IDependencyInjectionProvider implementation for other frame
+```xml
+<Page xmlns:nuie="using:UWP.Extensions.Library.Services.Navigation.Extensions.UI">
+
+    <Frame x:Name="contentFrame"
+           nuie:Navigation.RegisterRoute="contentFrame"
+           nuie:Navigation.DIProvider="{x:Bind ViewModel.DIProvider}"/>
+</Page>
+```
