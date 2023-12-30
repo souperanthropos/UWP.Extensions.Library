@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 
-namespace SampleApp.Services.Navigation
+namespace UWP.Extensions.Library.Services.Navigation
 {
     public class NavigationContext
     {

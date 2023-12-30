@@ -1,8 +1,8 @@
-﻿using SampleApp.ViewModels;
+﻿using UWP.Extensions.Library.Services.Navigation.Interfaces;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 
-namespace SampleApp.Services.Navigation
+namespace UWP.Extensions.Library.Services.Navigation
 {
     public class ViewModelBinder : IViewModelBinder
     {
@@ -14,7 +14,7 @@ namespace SampleApp.Services.Navigation
 
             if (view.DataContext != null)
             {
-                (view.DataContext as ViewModelBase)?.OnNavigationCompleted(context?.Parameter, navigationMode);
+                (view.DataContext as IViewModelBase)?.OnNavigationCompleted(context?.Parameter, navigationMode);
                 return;
             }
         }

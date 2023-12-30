@@ -1,7 +1,7 @@
 ﻿using System;
 using Windows.UI.Xaml.Controls;
 
-namespace SampleApp.Services.Navigation
+namespace UWP.Extensions.Library.Services.Navigation
 {
     public interface IFrameProvider
     {

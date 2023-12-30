@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
-namespace SampleApp.Services.Navigation
+namespace UWP.Extensions.Library.Services.Navigation
 {
     public class NavigationService : INavigationService
     {
@@ -71,7 +71,7 @@ namespace SampleApp.Services.Navigation
             throw new Exception($"Route name {routeName} is not registered");
         }
 
-        public bool Navigate<TView>(string routeName = "", Dictionary<string, object> parameter = null) where TView : Page
+        public bool Navigate<TView>(Dictionary<string, object> parameter, string routeName = "") where TView : Page
         {
             var context = new NavigationContext(parameter);
             if (string.IsNullOrEmpty(routeName))

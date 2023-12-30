@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 
-namespace SampleApp.Services.Navigation
+namespace UWP.Extensions.Library.Services.Navigation
 {
     public interface INavigationService
     {
         void RegisterRoute(Frame frame, string routeName);
         bool Navigate<TView>(string routeName = "") where TView : Page;
-        bool Navigate<TView>(string routeName = "", Dictionary<string, object> parameter = null) where TView : Page;
+        bool Navigate<TView>(Dictionary<string, object> parameter, string routeName = "") where TView : Page;
         void NavigateBack(string routeName = "");
     }
 }

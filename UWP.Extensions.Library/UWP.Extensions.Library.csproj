@@ -126,6 +126,16 @@
     <Compile Include="Controls\IncrementalGroupedListViewControl.cs" />
     <Compile Include="Extensions\IListBinarySearchExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Navigation\DefaultFrameProvider.cs" />
+    <Compile Include="Services\Navigation\Extensions\UI\Navigation.cs" />
+    <Compile Include="Services\Navigation\IFrameProvider.cs" />
+    <Compile Include="Services\Navigation\INavigationService.cs" />
+    <Compile Include="Services\Navigation\Interfaces\IDependencyInjectionProvider.cs" />
+    <Compile Include="Services\Navigation\Interfaces\IViewModelBase.cs" />
+    <Compile Include="Services\Navigation\IViewModelBinder.cs" />
+    <Compile Include="Services\Navigation\NavigationExtensions.cs" />
+    <Compile Include="Services\Navigation\NavigationService.cs" />
+    <Compile Include="Services\Navigation\ViewModelBinder.cs" />
     <EmbeddedResource Include="Properties\UWP.Extensions.Library.rd.xml" />
   </ItemGroup>
   <ItemGroup>
