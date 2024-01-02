@@ -38,7 +38,7 @@ public class ViewModelBase : IViewModelBase
     public ViewModelBase() { }
 
     public virtual void OnNavigationCompleted(Dictionary<string, object> parameter, NavigationMode navigationMode) { }
-
+    
     public virtual Task InitializeAsync()
     {
         return Task.FromResult(true);
